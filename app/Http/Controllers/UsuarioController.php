@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class UsuarioController extends Controller
 {
@@ -26,8 +27,7 @@ class UsuarioController extends Controller
                 'Apellidos' => $usuario->Apellidos,
                 'Estado' => $usuario->Nombre,
                 'Contrasena' => $usuario->Contrasena,
-                'Token' => $usuario->Token,
-                'Tiempo' => $usuario->Tiempo
+                'Token' => $usuario->Token
             ];
         }
 
@@ -59,7 +59,6 @@ class UsuarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-
     {
 
         $reglas = [
@@ -76,25 +75,26 @@ class UsuarioController extends Controller
             $errores =  implode(" ", $validator->errors()->all());
 
             abort(code: 400, message: "Error de validacion: {$errores}");
-        }
-        try {
-            $usuario = new Usuario();
+        }else{
+            try {
+                $usuario = new Usuario();
 
-            $usuario->Identificacion = $request->Identificacion;
-            $usuario->Contrasena = sha1($request->Contrasena);
-            $usuario->Nombre = $request->Nombre;
-            $usuario->Apellidos = $request->Apellidos;
-            $usuario->Estado = $request->Estado;
-            $usuario->save();
+                $usuario->Identificacion = $request->Identificacion;
+                $usuario->Contrasena = sha1($request->Contrasena);
+                $usuario->Nombre = $request->Nombre;
+                $usuario->Apellidos = $request->Apellidos;
+                $usuario->Estado = $request->Estado;
+                $usuario->save();
 
-            $mensaje = [
-                'Respuesta del usuario' => "Usuario agregado correctamente",
-                'Datos creados' => $usuario
-            ];
+                $mensaje = [
+                    'Respuesta del usuario' => "Usuario agregado correctamente",
+                    'Datos creados' => $usuario
+                ];
 
-            return response()->json($mensaje, 201);
-        } catch (\Throwable $th) {
-            abort(code: 409, message: "El Usuario '{$request->Identificacion}' ya se encuentra registrado");
+                return response()->json($mensaje, 201);
+            } catch (\Throwable $th) {
+                abort(code: 409, message: "El Usuario '{$request->Identificacion}' ya se encuentra registrado");
+            }
         }
     }
 
@@ -128,12 +128,13 @@ class UsuarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $usuario = Usuario::find($request->IdUsuario);
+
         $estadoactual = Usuario::WHERE('Estado', "=", $request->Estado)
-            ->WHERE('IdUsuario', "=", $request->IdUsuario)
-            ->exists();
+        ->WHERE('IdUsuario', "=", $request->IdUsuario)
+        ->exists();
 
         if (!empty($usuario)) {
             $reglas = [
@@ -184,9 +185,10 @@ class UsuarioController extends Controller
     public function destroy(Request $request)
     {
         $existe = Usuario::find($request->IdUsuario);
-        if (!empty($existe)) {
-            try {
 
+        if (!empty($existe)) {
+
+            try {
                 $usuario = Usuario::destroy($request->IdUsuario);
 
                 if ($usuario) {
@@ -204,10 +206,9 @@ class UsuarioController extends Controller
         }
     }
 
-
-
     public function login(Request $request)
     {
+
         $reglas = [
             'Identificacion' => 'required|integer',
             'Contrasena' => 'required|string',
@@ -224,8 +225,13 @@ class UsuarioController extends Controller
 
             if ($usuario) {
                 if (sha1($request->Contrasena) == $usuario->Contrasena) {
+
+                    $usuario->Token = Str::random(100);
+                    $usuario->save();
+
                     $mensaje = [
-                        'Respuesta del Servidor' => "Bienvenido al sistema {$usuario->Nombre}"
+                        'Respuesta del Servidor' => "Bienvenido al sistema {$usuario->Nombre}",
+                        'Token' => $usuario->Token,
                     ];
 
                     return response()->json($mensaje);
@@ -237,7 +243,7 @@ class UsuarioController extends Controller
                     return response()->json($mensaje, 404);
                 }
             } else {
-                abort(code: 500, message: "No hay registros con la Identificacion: {$request->Identificacion}");
+                abort(code: 404, message: "No hay registros con la Identificacion: {$request->Identificacion}");
             }
         }
     }

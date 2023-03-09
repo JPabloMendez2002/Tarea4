@@ -20,8 +20,7 @@ return new class extends Migration
             $table->string('Nombre',10);
             $table->string('Apellidos',20);
             $table->integer('Estado');
-            $table->string('Token',50)->nullable();
-            $table->integer('Tiempo')->nullable();
+            $table->string('Token',200)->nullable();
             $table->timestamps();
         });
     }

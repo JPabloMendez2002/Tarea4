@@ -26,10 +26,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('usuarios/login', [UsuarioController::class, 'login']);
 
-Route::resource('usuarios', UsuarioController::class)->parameters(['usuarios'=>'IdUsuario']);
+Route::middleware('auth:sanctum')->resource('usuarios', UsuarioController::class)->parameters(['usuarios'=>'IdUsuario']);
 
-Route::resource('contactos', ContactosController::class)->parameters(['contactos'=>'IdContacto']);
+Route::middleware('auth:sanctum')->resource('contactos', ContactosController::class)->parameters(['contactos'=>'IdContacto']);
 
-Route::resource('telefonos', TelefonosController::class)->parameters(['telefonos'=>'IdTelefono']);
+Route::middleware('auth:sanctum')->resource('telefonos', TelefonosController::class)->parameters(['telefonos'=>'IdTelefono']);
 
-Route::resource('correos', CorreosController::class)->parameters(['correos'=>'IdCorreo']);
+Route::middleware('auth:sanctum')->resource('correos', CorreosController::class)->parameters(['correos'=>'IdCorreo']);
