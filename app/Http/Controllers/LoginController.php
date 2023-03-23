@@ -26,20 +26,20 @@ class LoginController extends Controller
             $usuario = Usuario::where('Identificacion', $request->Identificacion)->where('Estado', '=', 1)->first();
             $administrador = Administrador::where('Identificacion', $request->Identificacion)->first();
             try{
-                
 
                 if ($request->Identificacion == $usuario->Identificacion && sha1($request->Contrasena) == $usuario->Contrasena) {
                     $mensaje = [
-                        'Respuesta del Servidor' => "Bienvenido al sistema {$usuario->Nombre} {$usuario->Apellidos}"
+                        'Usuario' => "Tipo1",
+                        'ID' => $usuario->IdUsuario,
                     ];
 
                     return response()->json($mensaje, 200);
 
                 } elseif ($request->Identificacion == $administrador->Identificacion && sha1($request->Contrasena) == $administrador->Contrasena) {
                     $mensaje = [
-                        'Respuesta del Servidor' => "Bienvenido al sistema {$administrador->Nombre} {$administrador->Apellidos}"
+                        'Usuario' => "Tipo2",
+                        'ID' => $administrador->IdUsuario
                     ];
-                    echo $administrador;
 
                     return response()->json($mensaje, 200);
                 }else{
@@ -52,7 +52,7 @@ class LoginController extends Controller
             }catch(Exception $e){
                 return response()->json($e, 500);
             }
-            
+
         }
     }
 }
