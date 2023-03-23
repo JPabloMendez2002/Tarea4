@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Telefonos;
 use App\Models\Contactos;
+use App\Models\Correos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -86,10 +87,26 @@ class TelefonosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+
     }
+
+    
+    public function telefonosContacto(Request $request){
+           
+        $listatelefonos = Telefonos::WHERE('IdContacto',$request->IdContacto)->get();
+         return response()->json($listatelefonos, 200);
+        
+    }
+
+    public function correosContacto(Request $request){
+           
+        $listaCorreos = Correos::WHERE('IdContacto',$request->IdContacto)->get();
+         return response()->json($listaCorreos, 200);
+        
+    }
+
 
     /**
      * Show the form for editing the specified resource.

@@ -19,21 +19,37 @@ class ContactosController extends Controller
      */
     public function index()
     {
-        $contactos = Contactos::Select('IdContacto', 'Nombre', 'Apellidos', 'Facebook', 'Instagram', 'Twitter')->get();
-        $telefonos = Contactos::JOIN('Telefonos', 'Telefonos.IdContacto', '=', 'Contactos.IdContacto')
-            ->Select('Telefonos.IdContacto', 'Telefonos.Telefono')->get();
+        //$contactos = Contactos::Select('IdContacto', 'Nombre', 'Apellidos', 'Facebook', 'Instagram', 'Twitter')->get();
+        // $telefonos = Contactos::JOIN('Telefonos', 'Telefonos.IdContacto', '=', 'Contactos.IdContacto')
+        //     ->Select('Telefonos.IdContacto', 'Telefonos.Telefono')->get();
 
-        $correos =  Contactos::JOIN('Correos', 'Correos.IdContacto', '=', 'Contactos.IdContacto')
-            ->Select('Correos.IdContacto', 'Correos.Correo')->get();
+        // $correos =  Contactos::JOIN('Correos', 'Correos.IdContacto', '=', 'Contactos.IdContacto')
+        //     ->Select('Correos.IdContacto', 'Correos.Correo')->get();
 
-        if (!empty($contactos) or !empty($telefonos)  or !empty($correos)) {
-            $listaDatos[] = [
-                'Lista de Contactos' => $contactos,
-                "Telefono(s) del Contacto" => $telefonos,
-                "Correo(s) del Contacto" => $correos
+        
+        // if (!empty($contactos)) {
+        //     $listaDatos[] = [
+        //         'Lista de Contactos' => $contactos
+        //     ];
+
+
+        $usuarios = Contactos::all();
+        $datos = [];
+
+        foreach ($usuarios as $usuario) {
+            $datos[] = [
+                'IdContacto' => $usuario->IdContacto,
+                'Nombre' => $usuario->Nombre,
+                'Apellidos' => $usuario->Apellidos,
+                'Facebook' => $usuario->Facebook,
+                'Instagram' => $usuario->Instagram,
+                'Twitter' => $usuario->Twitter
             ];
+        }
 
-            return response()->json($listaDatos, 200);
+        
+        if (!empty($datos)) {
+            return response()->json($datos, 200);
         } else {
             $mensaje = [
                 'Respuesta del Servidor' => "No hay datos por mostrar",
@@ -69,7 +85,7 @@ class ContactosController extends Controller
                 'IdUsuario' => 'required|integer',
                 'Nombre' =>  'required|string',
                 'Apellidos' =>  'required|string',
-                'Correo' => 'required|email',
+                'Correo' => 'required|string',
                 'Telefono' => 'required|string',
                 'Facebook' =>  'required|string',
                 'Instagram' =>  'required|string',

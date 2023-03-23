@@ -25,7 +25,7 @@ class UsuarioController extends Controller
                 'Identificacion' => $usuario->Identificacion,
                 'Nombre' => $usuario->Nombre,
                 'Apellidos' => $usuario->Apellidos,
-                'Estado' => $usuario->Nombre,
+                'Estado' => $usuario->Estado,
                 'Contrasena' => $usuario->Contrasena,
                 'Token' => $usuario->Token
             ];

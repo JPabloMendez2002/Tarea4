@@ -35,7 +35,39 @@ class AdministradorController extends Controller
      */
     public function store(Request $request)
     {
-       
+        $reglas = [
+            'Identificacion' => 'required|integer',
+            'Contrasena' => 'required|string',
+            'Nombre' => 'required|string',
+            'Apellidos' => 'required|string'
+        ];
+
+        $validator = Validator::make($request->all(), $reglas);
+
+        if ($validator->fails()) {
+            $errores =  implode(" ", $validator->errors()->all());
+
+            abort(code: 400, message: "Error de validacion: {$errores}");
+        }else{
+            try {
+                $administrador = new Administrador();
+
+                $administrador->Identificacion = $request->Identificacion;
+                $administrador->Contrasena = sha1($request->Contrasena);
+                $administrador->Nombre = $request->Nombre;
+                $administrador->Apellidos = $request->Apellidos;
+                $administrador->save();
+
+                $mensaje = [
+                    'Respuesta del Servidor' => "Administrador agregado correctamente",
+                    'Datos creados' => $administrador
+                ];
+
+                return response()->json($mensaje, 201);
+            } catch (\Throwable $th) {
+                abort(code: 409, message: "El administrador '{$request->Identificacion}' ya se encuentra registrado");
+            }
+        }
     }
 
     /**
