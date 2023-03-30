@@ -139,29 +139,35 @@ class ContactosController extends Controller
      */
     public function show(Request $request)
     {
-
+            //
     }
 
 
     public function muestraContactos(Request $request)
     {
-        $contacto = Contactos::where('IdUsuario', $request->IdUsuario)->first();
-        var_dump($contacto);
-        if (!empty($contacto)) {
-            $mensaje = [
-               
-                'IdContacto' => $contacto->IdContacto,
-                'Nombre' => $contacto->Nombre,
-                'Apellidos' => $contacto->Apellidos,
-                'Facebook' => $contacto->Facebook,
-                'Instagram' => $contacto->Instagram,
-                'Twitter' => $contacto->Twitter
+
+        $contactos= Contactos::where('IdUsuario', $request->IdUsuario)->get();
+        foreach ($contactos as $usuario) {
+            $datos[] = [
+                'IdContacto' => $usuario->IdContacto,
+                'Nombre' => $usuario->Nombre,
+                'Apellidos' => $usuario->Apellidos,
+                'Facebook' => $usuario->Facebook,
+                'Instagram' => $usuario->Instagram,
+                'Twitter' => $usuario->Twitter
             ];
 
-            return response()->json($mensaje, 200);
-        } else {
-            abort(code: 404, message: "No se encontro el contacto con ID: {$request->IdUsuario}");
         }
+            if (!empty($datos)) {
+                return response()->json($datos, 200);
+            } else {
+                $mensaje = [
+                    'Respuesta del Servidor' => "No hay datos por mostrar",
+                ];
+    
+                return response()->json($mensaje, 404);
+            }
+        
     }
 
 

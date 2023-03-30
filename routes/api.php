@@ -46,5 +46,4 @@ Route::get('contactos/telefonos/{IdContacto}', [TelefonosController::class, 'tel
 Route::get('contactos/correos/{IdContacto}', [TelefonosController::class, 'correosContacto']);
 
 
-
-Route::get('contactos/{IdUsuario}', [ContactosController::class, 'muestraContactos']);
+Route::get('contactos/individual/{IdUsuario}', [ContactosController::class, 'muestraContactos']);
