@@ -29,8 +29,6 @@ Route::post('login', [LoginController::class, 'loginUsuarios']);
 
 Route::post('login/admin', [LoginController::class, 'loginAdmins']);
 
-Route::post('usuarios/login', [UsuarioController::class, 'login']);
-
 Route::resource('usuarios', UsuarioController::class)->parameters(['usuarios'=>'IdUsuario']);
 
 Route::resource('administrador', AdministradorController::class)->parameters(['administrador'=>'IdAdministrador']);
@@ -44,6 +42,5 @@ Route::resource('correos', CorreosController::class)->parameters(['correos'=>'Id
 Route::get('contactos/telefonos/{IdContacto}', [TelefonosController::class, 'telefonosContacto']);
 
 Route::get('contactos/correos/{IdContacto}', [TelefonosController::class, 'correosContacto']);
-
 
 Route::get('contactos/individual/{IdUsuario}', [ContactosController::class, 'muestraContactos']);
