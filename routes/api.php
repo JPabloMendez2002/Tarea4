@@ -44,3 +44,7 @@ Route::resource('correos', CorreosController::class)->parameters(['correos'=>'Id
 Route::get('contactos/telefonos/{IdContacto}', [TelefonosController::class, 'telefonosContacto']);
 
 Route::get('contactos/correos/{IdContacto}', [TelefonosController::class, 'correosContacto']);
+
+
+
+Route::get('contactos/{IdUsuario}', [ContactosController::class, 'muestraContactos']);

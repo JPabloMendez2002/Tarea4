@@ -137,11 +137,35 @@ class ContactosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+
     }
 
+
+    public function muestraContactos(Request $request)
+    {
+        $contacto = Contactos::where('IdUsuario', $request->IdUsuario)->first();
+        var_dump($contacto);
+        if (!empty($contacto)) {
+            $mensaje = [
+               
+                'IdContacto' => $contacto->IdContacto,
+                'Nombre' => $contacto->Nombre,
+                'Apellidos' => $contacto->Apellidos,
+                'Facebook' => $contacto->Facebook,
+                'Instagram' => $contacto->Instagram,
+                'Twitter' => $contacto->Twitter
+            ];
+
+            return response()->json($mensaje, 200);
+        } else {
+            abort(code: 404, message: "No se encontro el contacto con ID: {$request->IdUsuario}");
+        }
+    }
+
+
+    
     /**
      * Show the form for editing the specified resource.
      *
