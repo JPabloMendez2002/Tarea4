@@ -76,10 +76,24 @@ class AdministradorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+
+     public function show(Request $request)
+     {
+         $administrador = Administrador::where('IdAdministrador', $request->IdAdministrador)->first();
+ 
+         if (!empty($administrador)) {
+             $mensaje = [
+                 'IdAdministrador' => $administrador->IdAdministrador,
+                 'Identificacion' => $administrador->Identificacion,
+                 'Nombre' => $administrador->Nombre,
+                 'Apellidos' => $administrador->Apellidos
+             ];
+ 
+             return response()->json($mensaje, 200);
+         } else {
+             abort(code: 404, message: "No se encontro el administrador con ID: {$request->IdAdministrador}");
+         }
+     }
 
     /**
      * Show the form for editing the specified resource.
