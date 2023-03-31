@@ -193,15 +193,9 @@ class ContactosController extends Controller
     public function update(Request $request, $id)
     {
         $contacto = Contactos::find($request->IdContacto);
-        $contactoexiste = Contactos::WHERE('IdUsuario', "=", $contacto->IdUsuario)
-        ->Select('Facebook')
-        ->get();
+      
 
-        for($i = 0; $i < count($contactoexiste); $i++ ){
-           if( $contactoexiste[$i]['Facebook'] == $request->Facebook){
-             abort(code: 409, message: "Ya existe un Contacto con estos datos para la persona con ID '{$contacto->IdUsuario}'");
-           }
-        }
+
         if (!empty($contacto)) {
             $reglas = [
           

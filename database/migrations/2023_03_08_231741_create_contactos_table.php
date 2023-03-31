@@ -18,9 +18,9 @@ return new class extends Migration
             $table->unsignedBigInteger('IdUsuario');
             $table->string('Nombre',10);
             $table->string('Apellidos',20);
-            $table->string('Facebook',20);
-            $table->string('Instagram',20);
-            $table->string('Twitter',20);
+            $table->string('Facebook',100);
+            $table->string('Instagram',100);
+            $table->string('Twitter',100);
             $table->timestamps(); 
             $table->foreign('IdUsuario')->references('IdUsuario')->on('Usuarios');
         });
